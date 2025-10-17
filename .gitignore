@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.dist-info/
+build/
+dist/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+.env
+.env.*
+
+# Jupyter
+.ipynb_checkpoints/
+.notebooks_cache/
+
+# Tooling caches
+.pytest_cache/
+.cache/
+.mypy_cache/
+.ruff_cache/
+
+# Data / runs / logs (keep empty anchors with .gitkeep if needed)
+data/
+datasets/
+outputs/
+runs/
+logs/
+wandb/
+checkpoints/
+artifacts/
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+# Torch / model files (use git-lfs instead)
+*.pt
+*.pth
+*.onnx
+*.ckpt
+
+# Editors
+.vscode/
+.idea/
