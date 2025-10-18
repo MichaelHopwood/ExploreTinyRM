@@ -18,8 +18,8 @@ That’s it. Use your existing notebook setup (e.g., VS Code) and select this vi
 
 We use two layers:
 
-- `pyproject.toml` — **loose version ranges** for fast iteration.
-- `requirements-lock.txt` — **exact pins** for team synchronization.
+- `pyproject.toml` - **loose version ranges** for fast iteration.
+- `requirements-lock.txt` - **exact pins** for team synchronization.
 
 After your first successful local install:
 
@@ -43,7 +43,7 @@ If dependencies change, regenerate and commit a new `requirements-lock.txt`.
 Create notebooks under `notebooks/` and ensure your editor uses this repo’s virtual environment.
 Import algorithm code from `src/exploretinyrm/` as you add it.
 
-## 4. Repository Layout (minimal)
+## 4. Repository Layout
 
 ```
 ExploreTinyRM/
@@ -61,13 +61,3 @@ ExploreTinyRM/
 └─ tests/
 ```
 
-> Note: Git does not track empty folders. Add `.gitkeep` inside `notebooks/`, `scripts/`, and `tests/` if you want them visible before adding files.
-
-## 5. Large Files
-
-Do **not** commit datasets or model binaries. The `.gitignore` excludes common artifacts.
-If you later decide to version model weights, set up Git LFS locally before committing them.
-
-## 6. License
-
-MIT — see `LICENSE`.
