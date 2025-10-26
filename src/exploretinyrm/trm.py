@@ -14,20 +14,26 @@ import torch.nn.functional as F
 # Utility Layers (RMSNorm, SwiGLU, Token MLP, Self-Attention)
 # ------------------------------
 
+
 class RMSNorm(nn.Module):
-    """Root Mean Square LayerNorm without bias (AMP-safe: compute in fp32, cast back)"""
     def __init__(self, d_model: int, eps: float = 1e-6):
         super().__init__()
         self.eps = eps
         self.weight = nn.Parameter(torch.ones(d_model))
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        # Compute the normalization statistics in float32 for numerical stability under AMP
+        # Fast path: fused functional in PyTorch 2.9
+        if hasattr(F, "rms_norm"):
+            # normalize over last dim; use your existing learned scale
+            return F.rms_norm(x, self.weight.shape, weight=self.weight, eps=self.eps)
+
+        # Fallback: AMP-safe stats in float32, then cast back
         orig_dtype = x.dtype
-        x_float = x.float()
-        rms = x_float.pow(2).mean(dim=-1, keepdim=True).add(self.eps).sqrt()
-        x_norm = (x_float / rms).to(orig_dtype)
-        return self.weight.to(orig_dtype) * x_norm
+        x32 = x if x.dtype == torch.float32 else x.float()
+        inv_rms = torch.rsqrt(x32.mul(x32).mean(dim=-1, keepdim=True) + self.eps)
+        x_norm = (x32 * inv_rms).to(orig_dtype)
+        return x_norm * self.weight.to(orig_dtype)
+
 
 
 
